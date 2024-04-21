@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { SalesIntakeModel } from 'src/app/models/salesintake.model';
+import { SalesIntakeService } from '../../services/salesintake.service';
 
 @Component({
   selector: 'app-sales-intake-form',
@@ -7,10 +9,37 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./sales-intake-form.component.css']
 })
 export class SalesIntakeFormComponent implements OnInit {
-  public salesForm!: FormGroup;
-  constructor() { }
+  public salesForm = this.formBuilder.group({
+    sanctionloadinkw_fc:[""],
+    phaseatpremises_fc:[""]
+  })
+  constructor(private salesIntakeService:SalesIntakeService,private formBuilder:FormBuilder) { 
 
+  }
+  
+  submitted:boolean=false;
+
+  salesIntakeModel:SalesIntakeModel = {
+    sanctionloadinkw:"",
+    phaseatprememesis:""
+  }
+  
   ngOnInit(): void {
   }
-  submit() {}
+  
+  submit() {
+    const data = {
+      sanctionloadinkw:this.salesIntakeModel.sanctionloadinkw,
+      phaseatprememesis:this.salesIntakeModel.phaseatprememesis
+    }
+    this.salesIntakeService.exportSalesIntake(data)
+    .subscribe({
+      next: (res) => {
+        this.submitted = true;
+      },
+      error: (e) => {
+        console.log('Error occured on sumbit()',e);
+      }
+    })
+  }
 }
