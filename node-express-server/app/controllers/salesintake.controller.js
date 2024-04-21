@@ -1,4 +1,6 @@
 const db = require("../models");
+const Excel = require('exceljs');
+const fs = require('fs');
 
 const SalesIntake = db.salesintake;
 console.log("salesintake model",SalesIntake);
@@ -48,29 +50,32 @@ exports.findAll = (req, res) => {
       });
     });
 };
-exports.exportSalesIntake = (req,res) => {
-  const { sanctionloadinkw, age } = req.body;
-  //const workbook = new Excel.Workbook();
-  res.send({status:"Post Excel Success"});
-  // await workbook.xlsx.readFile('../excel-templates/salesTemplate.xlsx');
-  // const worksheet = workbook.getWorksheet(1);
+exports.exportSalesIntake = async (req,res) => {
+  const { sanctionloadinkw, phaseatpremesis } = req.body;
+  console.log('data: ',sanctionloadinkw,phaseatpremesis);
 
-  // // Find the row with the matching name to update
-  // let targetRow = null;
-  // worksheet.eachRow((row, rowNumber) => {
-  //   if (row.getCell(1).value === name) { // Assuming 'Name' is in column 1
-  //     targetRow = rowNumber;
-  //   }
-  // });
+  const workbook = new Excel.Workbook();
+  //res.send({status:"Post Excel Success"});
+  const fullpath = fs.realpathSync("salesTemplate.xlsx");
+  await workbook.xlsx.readFile(fullpath);
 
-  // if (targetRow) {
-  //   // Update the age in the found row, assuming 'Age' is in column 2
-  //   worksheet.getRow(targetRow).getCell(2).value = age;
-  //   await workbook.xlsx.writeFile('updatedResult.xlsx');
-  //   res.send({ message: 'Updated successfully' });
-  // } else {
-  //   // Handle case where the name is not found
-  //   res.status(404).send({ message: 'Name not found in the spreadsheet' });
-  // }
+  const worksheet = workbook.getWorksheet(1);
+  console.log("1. after getting worksheet");
+  // Find the row with the matching name to update
+  let targetRow = true;
+
+  worksheet.eachRow({ includeEmpty: false }, function(row, rowNumber) {
+        console.log('Row ' + rowNumber + ' = ' + JSON.stringify(row.values));
+  });
+  console.log("after looking at the contents of the worksheet");
+  if (1) {
+    // Update the age in the found row, assuming 'Age' is in column 2
+    // worksheet.getRow(targetRow).getCell(2).value = age;
+    // workbook.xlsx.writeFile('updatedResult.xlsx');
+    res.send({ message: 'Updated successfully' });
+  } else {
+    // Handle case where the name is not found
+    res.status(404).send({ message: 'Name not found in the spreadsheet' });
+  }
 };
 

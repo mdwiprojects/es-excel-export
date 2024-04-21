@@ -19,18 +19,18 @@ export class SalesIntakeFormComponent implements OnInit {
   
   submitted:boolean=false;
 
-  salesIntakeModel:SalesIntakeModel = {
-    sanctionloadinkw:"",
-    phaseatprememesis:""
-  }
+  // salesIntakeModel:SalesIntakeModel = {
+  //   sanctionloadinkw:"",
+  //   phaseatprememesis:""
+  // }
   
   ngOnInit(): void {
   }
   
   submit() {
     const data = {
-      sanctionloadinkw:this.salesIntakeModel.sanctionloadinkw,
-      phaseatprememesis:this.salesIntakeModel.phaseatprememesis
+      sanctionloadinkw:this.salesForm.value.sanctionloadinkw_fc,
+      phaseatpremesis:this.salesForm.value.phaseatpremises_fc
     }
     this.salesIntakeService.exportSalesIntake(data)
     .subscribe({
