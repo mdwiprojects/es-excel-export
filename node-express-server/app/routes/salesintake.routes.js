@@ -3,9 +3,11 @@ module.exports = app => {
 
   var router = require("express").Router();
 
-  // Retrieve all Tutorials
+  // Retrieve all salesIntake urls
+  // http://localhost/8081/ ==> goes to salesintake.findall command
   router.get("/", salesintake.findAll);
 
+  // http://localhost/8081/excel ==> goes to salesintake.exportSalesIntake command
   router.post("/excel",salesintake.exportSalesIntake);
  
   app.use("/api/salesintake", router);

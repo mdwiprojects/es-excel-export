@@ -1,12 +1,16 @@
 const express = require("express");
+//supports secure cross-origin requests and data transfers between 
+//browsers and servers.
+
 const cors = require("cors");
 
 const app = express();
 
+// front end
 var corsOptions = {
   origin: "http://localhost:8081"
 };
-
+// front end URL
 app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json
@@ -36,7 +40,7 @@ app.get("/", (req, res) => {
 
 require("./app/routes/salesintake.routes")(app);
 
-// set port, listen for requests
+// set server port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
